@@ -1,0 +1,124 @@
+asyncapi: 3.1.0
+id: urn:com.arcadiaeditions:api-contract-commons:asyncapi:channel-bindings
+info:
+  title: "Arcadia Editions - AsyncAPI Channel Bindings"
+  version: 0.0.1
+  description: >
+    Shared AsyncAPI Channel Bindings.
+
+components:
+  channelBindings:
+    kafkaTopicXSRetained:
+      kafka:
+        partitions: 1
+        replicas: 3
+        topicConfiguration:
+          cleanup.policy: ["delete"]
+          retention.ms: 604800000
+          retention.bytes: 1000000000
+          delete.retention.ms: 86400000
+          max.message.bytes: 1048588
+        x-env-server-overrides:
+          dev:
+            partitions: 1
+            replicas: 1
+            topicConfiguration:
+              cleanup.policy: ["delete"]
+              retention.ms: 604800
+          staging:
+            partitions: 3
+            replicas: 2
+    kafkaTopicSRetained:
+      kafka:
+        partitions: 3
+        replicas: 3
+        topicConfiguration:
+          cleanup.policy: ["delete"]
+          retention.ms: 604800000
+          retention.bytes: 1000000000
+          delete.retention.ms: 86400000
+          max.message.bytes: 1048588
+        x-env-server-overrides:
+          dev:
+            partitions: 1
+            replicas: 1
+            topicConfiguration:
+              cleanup.policy: ["delete"]
+              retention.ms: 604800
+          staging:
+            partitions: 3
+            replicas: 2
+    kafkaTopicMRetained:
+      kafka:
+        partitions: 9
+        replicas: 3
+        topicConfiguration:
+          cleanup.policy: ["delete"]
+          retention.ms: 604800000
+          retention.bytes: 1000000000
+          delete.retention.ms: 86400000
+          max.message.bytes: 1048588
+        x-env-server-overrides:
+          dev:
+            partitions: 1
+            replicas: 1
+            topicConfiguration:
+              cleanup.policy: ["delete"]
+              retention.ms: 604800
+          staging:
+            partitions: 3
+            replicas: 2
+    kafkaTopicXSCompacted:
+      kafka:
+        partitions: 1
+        replicas: 3
+        topicConfiguration:
+          cleanup.policy: ["compact"]
+          delete.retention.ms: 86400000
+          max.message.bytes: 1048588
+        x-env-server-overrides:
+          dev:
+            partitions: 1
+            replicas: 1
+            topicConfiguration:
+              cleanup.policy: ["delete"]
+              retention.ms: 604800
+          staging:
+            partitions: 3
+            replicas: 2
+    kafkaTopicSCompacted:
+      kafka:
+        partitions: 3
+        replicas: 3
+        topicConfiguration:
+          cleanup.policy: ["compact"]
+          delete.retention.ms: 86400000
+          max.message.bytes: 1048588
+        x-env-server-overrides:
+          dev:
+            partitions: 1
+            replicas: 1
+            topicConfiguration:
+              cleanup.policy: ["delete"]
+              retention.ms: 604800
+          staging:
+            partitions: 3
+            replicas: 2
+    kafkaTopicMCompacted:
+      kafka:
+        partitions: 9
+        replicas: 3
+        topicConfiguration:
+          cleanup.policy: ["compact"]
+          delete.retention.ms: 86400000
+          max.message.bytes: 1048588
+        x-env-server-overrides:
+          dev:
+            partitions: 1
+            replicas: 1
+            topicConfiguration:
+              cleanup.policy: ["delete"]
+              retention.ms: 604800
+          staging:
+            partitions: 3
+            replicas: 2

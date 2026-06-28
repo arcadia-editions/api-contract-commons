@@ -1,0 +1,74 @@
+overlay: 1.1.0
+info:
+  title: Arcadia Editions shared AsyncAPI defaults
+  version: 1.0.0
+  description: >
+    Applies the shared development server, Kafka channel binding, message
+    headers, and operation identity defaults to an AsyncAPI document.
+
+actions:
+  - target: "$"
+    description: Upgrade the target document to AsyncAPI 3.1.0.
+    update:
+      asyncapi: 3.1.0
+
+  - target: "$.servers.develop"
+    description: Remove an existing develop server before adding the shared reference.
+    remove: true
+
+  - target: "$"
+    description: Add the shared development server.
+    update:
+      servers:
+        develop:
+          $ref: "https://raw.githubusercontent.com/arcadia-editions/api-contract-commons/refs/heads/main/asyncapi-master.yml#/servers/develop"
+
+  - target: "$.components.messageTraits.CommonHeaders"
+    description: Remove an existing CommonHeaders trait before adding the shared reference.
+    remove: true
+
+  - target: "$"
+    description: Add the shared components.
+    update:
+      components:
+        messageTraits:
+          CommonHeaders:
+            $ref: "https://raw.githubusercontent.com/arcadia-editions/api-contract-commons/refs/heads/main/asyncapi-message-traits.yml#/components/messageTraits/CommonHeaders"
+        operationTraits:
+          clientIdAndPrincipal:
+            bindings:
+              kafka:
+                x-principal:
+                  $ref: "#/x-application-bindings/x-principal"
+                x-groupId:
+                  $ref: "#/x-application-bindings/x-groupId"
+
+  - target: "$.channels.*.bindings"
+    description: Remove existing channel bindings before applying the shared Kafka binding.
+    remove: true
+
+  - target: "$.channels.*"
+    description: Apply the shared retained Kafka Channel Bindings through shared traits.
+    update:
+      x-traits:
+        - $ref: "https://raw.githubusercontent.com/arcadia-editions/api-contract-commons/refs/heads/main/asyncapi-channel-traits.yml#/components/channelTraits/kafkaTopicS"
+        - $ref: "https://raw.githubusercontent.com/arcadia-editions/api-contract-commons/refs/heads/main/asyncapi-channel-traits.yml#/components/channelTraits/kafkaTopicRetained"
+
+  - target: "$.channels.*"
+    description: Mark every channel as globally visible.
+    update:
+      x-visibility: global
+
+  - target: "$.operations.*"
+    description: Add the shared Kafka bindings to every operation.
+    update:
+      traits:
+        - $ref: "#/components/operationTraits/clientIdAndPrincipal"
+
+#  - target: "$.operations.*.bindings.kafka.x-principal"
+#    description: Use the complete AsyncAPI id as the operation principal.
+#    copy: "$.id"
+#
+#  - target: "$.operations.*.bindings.kafka.x-groupId"
+#    description: Use the complete AsyncAPI id as the operation group id.
+#    copy: "$.id"

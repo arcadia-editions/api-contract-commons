@@ -1,0 +1,75 @@
+asyncapi: 3.0.0
+id: urn:com.arcadiaeditions:api-contract-commons:asyncapi:master
+info:
+  title: "Arcadia Editions - Master AsyncAPI Components"
+  version: 0.0.1
+  description: >
+    Shared AsyncAPI sections for Arcadia Editions event-driven APIs. Service
+    contracts should reference these sections for common Kafka servers, protocol
+    bindings, security schemes, correlation IDs, and message headers.
+
+defaultContentType: application/json
+
+servers:
+  local:
+    host: localhost:9092
+    protocol: kafka
+    protocolVersion: "3.x"
+    description: Local Kafka broker for development and contract testing.
+    bindings:
+      $ref: "#/components/serverBindings/confluentSchemaRegistry"
+  develop:
+    host: "{bootstrapServers}"
+    protocol: kafka-secure
+    protocolVersion: "3.x"
+    description: Shared development Kafka cluster.
+    security:
+      - $ref: "#/components/securitySchemes/kafkaSaslPlain"
+    variables:
+      bootstrapServers:
+        description: Kafka bootstrap server list for the develop environment.
+        default: develop.kafka.arcadia-editions.example:9092
+    bindings:
+      $ref: "#/components/serverBindings/confluentSchemaRegistry"
+  pre:
+    host: "{bootstrapServers}"
+    protocol: kafka-secure
+    protocolVersion: "3.x"
+    description: Pre-production Kafka cluster.
+    security:
+      - $ref: "#/components/securitySchemes/kafkaSaslPlain"
+    variables:
+      bootstrapServers:
+        description: Kafka bootstrap server list for the pre environment.
+        default: pre.kafka.arcadia-editions.example:9092
+    bindings:
+      $ref: "#/components/serverBindings/confluentSchemaRegistry"
+  prod:
+    host: "{bootstrapServers}"
+    protocol: kafka-secure
+    protocolVersion: "3.x"
+    description: Production Kafka cluster.
+    security:
+      - $ref: "#/components/securitySchemes/kafkaSaslPlain"
+    variables:
+      bootstrapServers:
+        description: Kafka bootstrap server list for the prod environment.
+        default: prod.kafka.arcadia-editions.example:9092
+    bindings:
+      $ref: "#/components/serverBindings/confluentSchemaRegistry"
+
+components:
+  securitySchemes:
+    kafkaSaslPlain:
+      type: plain
+      description: Kafka API key and secret used with SASL/PLAIN over TLS.
+    schemaRegistryBasicAuth:
+      type: http
+      scheme: basic
+      description: Schema Registry API key and secret used with HTTP basic auth.
+
+  serverBindings:
+    confluentSchemaRegistry:
+      kafka:
+        schemaRegistryUrl: "{schemaRegistryUrl}"
+        schemaRegistryVendor: confluent
