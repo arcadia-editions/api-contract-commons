@@ -1,0 +1,70 @@
+overlay: 1.1.0
+info:
+  title: Arcadia Editions shared AsyncAPI defaults
+  version: 1.0.0
+  description: >
+    Applies the shared development server, Kafka channel binding, message
+    headers, and operation identity defaults to an AsyncAPI document.
+
+actions:
+  - target: "$"
+    description: Upgrade the target document to AsyncAPI 3.1.0.
+    update:
+      asyncapi: 3.1.0
+
+  - target: "$.servers.develop"
+    description: Remove an existing develop server before adding the shared reference.
+    remove: true
+
+  - target: "$"
+    description: Add the shared development server.
+    update:
+      servers:
+        develop:
+          $ref: "https://raw.githubusercontent.com/arcadia-editions/api-contract-commons/refs/heads/main/asyncapi-master.yml#/servers/develop"
+
+  - target: "$.components.messageTraits.CommonHeaders"
+    description: Remove an existing CommonHeaders trait before adding the shared reference.
+    remove: true
+
+  - target: "$"
+    description: Add the shared CommonHeaders message trait component.
+    update:
+      components:
+        messageTraits:
+          CommonHeaders:
+            $ref: "https://raw.githubusercontent.com/arcadia-editions/api-contract-commons/refs/heads/main/asyncapi-master.yml#/components/messageTraits/CommonHeaders"
+
+  - target: "$.channels.*.bindings"
+    description: Remove existing channel bindings before applying the shared Kafka binding.
+    remove: true
+
+  - target: "$.channels.*"
+    description: Apply the shared retained Kafka topic binding to every channel.
+    update:
+      bindings:
+        $ref: "https://raw.githubusercontent.com/arcadia-editions/api-contract-commons/refs/heads/main/asyncapi-master.yml#/components/channelBindings/kafkaTopicSRetained"
+
+  - target: "$.operations.*"
+    description: Ensure operation identity extensions exist before copying the AsyncAPI id.
+    update:
+      x-principal: arcadia-editions
+      x-groupId: arcadia-editions
+
+  - target: "$.operations.*.x-principal"
+    description: Use the complete AsyncAPI id as the operation principal.
+    copy: "$.id"
+
+  - target: "$.operations.*.x-groupId"
+    description: Use the complete AsyncAPI id as the operation group id.
+    copy: "$.id"
+
+  - target: "$.components.messages.*.traits[?(@['$ref'] == '#/components/messageTraits/CommonHeaders' || @['$ref'] == 'https://raw.githubusercontent.com/arcadia-editions/api-contract-commons/refs/heads/main/asyncapi-master.yml#/components/messageTraits/CommonHeaders')]"
+    description: Remove existing CommonHeaders references to keep the overlay idempotent.
+    remove: true
+
+  - target: "$.components.messages.*"
+    description: Apply CommonHeaders to every reusable Message Object.
+    update:
+      traits:
+        - $ref: "https://raw.githubusercontent.com/arcadia-editions/api-contract-commons/refs/heads/main/asyncapi-master.yml#/components/messageTraits/CommonHeaders"
