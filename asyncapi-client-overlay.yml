@@ -1,0 +1,43 @@
+overlay: 1.1.0
+info:
+  title: Arcadia Editions shared AsyncAPI Client defaults
+  version: 1.0.0
+  description: >
+    Applies the shared client defaults to an AsyncAPI document.
+
+
+actions:
+  - target: "$"
+    description: Add the shared components.
+    update:
+      components:
+        messageTraits:
+          CommonHeaders:
+            $ref: "https://raw.githubusercontent.com/arcadia-editions/api-contract-commons/refs/heads/main/asyncapi-message-traits.yml#/components/messageTraits/CommonHeaders"
+        operationTraits:
+          clientIdAndPrincipal:
+            bindings:
+              kafka:
+                x-principal:
+                  $ref: "#/x-application-bindings/x-principal"
+                x-groupId:
+                  $ref: "#/x-application-bindings/x-groupId"
+  - target: "$.operations.*"
+    description: Add the shared Kafka bindings to every operation.
+    update:
+      traits:
+        - $ref: "#/components/operationTraits/clientIdAndPrincipal"
+
+  - target: "$.operations[?(@.action == 'receive')]"
+    description: Add the shared Kafka error topics to receive operations.
+    update:
+      bindings:
+        kafka:
+          x-error-topic:
+            addressTemplate: "${groupId}.__.${channel.address}.${suffix}"
+            retryTopics: 3
+            retrySuffixes: [retry-5s, retry-30s, retry-5m]
+            retry:
+              $ref: "https://raw.githubusercontent.com/arcadia-editions/api-contract-commons/refs/heads/main/asyncapi-error-topics.yml#/components/error-topics/retry/silver"
+            dlq:
+              $ref: "https://raw.githubusercontent.com/arcadia-editions/api-contract-commons/refs/heads/main/asyncapi-error-topics.yml#/components/error-topics/dlq/compliance"

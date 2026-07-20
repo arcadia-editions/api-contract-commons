@@ -1,0 +1,92 @@
+asyncapi: 3.2.0
+id: urn:com.arcadiaeditions:api-contract-commons:asyncapi:channel-traits
+info:
+  title: "Arcadia Editions - AsyncAPI Channel Traits"
+  version: 0.0.1
+  description: >
+    Shared AsyncAPI Composable Channel Traits, available since v3.2.0 or with zenwave-sdk via x-traits extension.
+
+components:
+  channelTraits:
+    kafkaTopicXS:
+      bindings:
+        kafka:
+          partitions: 1
+          replicas: 3
+          x-env-server-overrides:
+            dev:
+              partitions: 1
+              replicas: 1
+            staging:
+              partitions: 3
+              replicas: 2
+    kafkaTopicS:
+      bindings:
+        kafka:
+          partitions: 3
+          replicas: 3
+          x-env-server-overrides:
+            dev:
+              partitions: 1
+              replicas: 1
+            staging:
+              partitions: 3
+              replicas: 2
+    kafkaTopicM:
+      bindings:
+        kafka:
+          partitions: 6
+          replicas: 3
+          x-env-server-overrides:
+            dev:
+              partitions: 1
+              replicas: 1
+            staging:
+              partitions: 3
+              replicas: 2
+    kafkaTopicL:
+      bindings:
+        kafka:
+          partitions: 9
+          replicas: 3
+          x-env-server-overrides:
+            dev:
+              partitions: 1
+              replicas: 1
+            staging:
+              partitions: 3
+              replicas: 2
+    kafkaTopicRetained:
+      bindings:
+        kafka:
+          topicConfiguration:
+            cleanup.policy: [ "delete" ]
+            retention.ms: 604800000
+            retention.bytes: 1000000000
+            delete.retention.ms: 86400000
+            max.message.bytes: 1048588
+          x-env-server-overrides:
+            dev:
+              topicConfiguration:
+                cleanup.policy: [ "delete" ]
+                retention.ms: 604800
+            staging:
+              topicConfiguration:
+                cleanup.policy: [ "delete" ]
+                retention.ms: 604800
+    kafkaTopicCompacted:
+      bindings:
+        kafka:
+          topicConfiguration:
+            cleanup.policy: [ "compact" ]
+            delete.retention.ms: 86400000
+            max.message.bytes: 1048588
+          x-env-server-overrides:
+            dev:
+              topicConfiguration:
+                cleanup.policy: [ "delete" ]
+                retention.ms: 604800
+            staging:
+              topicConfiguration:
+                cleanup.policy: [ "delete" ]
+                retention.ms: 604800

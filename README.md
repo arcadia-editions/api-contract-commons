@@ -22,7 +22,7 @@ servers:
 components:
   messageTraits:
     CommonHeaders:
-      $ref: "https://raw.githubusercontent.com/arcadia-editions/api-contract-commons/refs/heads/main/asyncapi-master.yml#/components/messageTraits/CommonHeaders"
+      $ref: "https://raw.githubusercontent.com/arcadia-editions/api-contract-commons/refs/heads/main/asyncapi-message-traits.yml#/components/messageTraits/CommonHeaders"
 ```
 
 Keep service-specific channels, operations, payload schemas, and event names in
