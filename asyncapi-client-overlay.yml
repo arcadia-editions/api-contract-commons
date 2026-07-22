@@ -33,7 +33,7 @@ actions:
     update:
       bindings:
         kafka:
-          x-error-topic:
+          x-error-topics:
             addressTemplate: "${groupId}.__.${channel.address}.${suffix}"
             retryTopics: 3
             retrySuffixes: [retry-5s, retry-30s, retry-5m]
