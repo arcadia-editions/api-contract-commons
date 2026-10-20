@@ -14,7 +14,7 @@ components:
           partitions: 1
           replicas: 3
           x-env-server-overrides:
-            dev:
+            develop:
               partitions: 1
               replicas: 1
             staging:
@@ -26,7 +26,7 @@ components:
           partitions: 3
           replicas: 3
           x-env-server-overrides:
-            dev:
+            develop:
               partitions: 1
               replicas: 1
             staging:
@@ -38,7 +38,7 @@ components:
           partitions: 6
           replicas: 3
           x-env-server-overrides:
-            dev:
+            develop:
               partitions: 1
               replicas: 1
             staging:
@@ -50,7 +50,7 @@ components:
           partitions: 9
           replicas: 3
           x-env-server-overrides:
-            dev:
+            develop:
               partitions: 1
               replicas: 1
             staging:
@@ -66,7 +66,7 @@ components:
             delete.retention.ms: 86400000
             max.message.bytes: 1048588
           x-env-server-overrides:
-            dev:
+            develop:
               topicConfiguration:
                 cleanup.policy: [ "delete" ]
                 retention.ms: 604800
@@ -82,7 +82,7 @@ components:
             delete.retention.ms: 86400000
             max.message.bytes: 1048588
           x-env-server-overrides:
-            dev:
+            develop:
               topicConfiguration:
                 cleanup.policy: [ "delete" ]
                 retention.ms: 604800
