@@ -28,7 +28,7 @@ actions:
       traits:
         - $ref: "#/components/operationTraits/clientIdAndPrincipal"
 
-  - target: "$.operations[?(@.action == 'receive')]"
+  - target: "$.operations.*[?(@.action == 'receive')]"
     description: Add the shared Kafka error topics to receive operations.
     update:
       bindings:
